@@ -17,11 +17,11 @@ export default function FAB({ style, icon, onPress }: Props) {
 const styles = StyleSheet.create({
     fab: {
         position: 'absolute',
-        bottom: 100,
+        bottom: 50,
         right: 20,
         backgroundColor: 'blue',
-        width: 65,
-        height: 65,
+        width: 60,
+        height: 60,
         borderRadius: 120,
         justifyContent: 'center',
         alignItems: 'center',

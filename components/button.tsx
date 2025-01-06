@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { useThemeContext } from '@/context/theme-context';
 
 interface Props {
-    onPress: () => void;
+    onPress?: () => void;
     text?: string;
     style?: StyleProp<ViewStyle>;
     textStyle?: StyleProp<TextStyle>;
@@ -13,7 +13,12 @@ interface Props {
 
 const Button = forwardRef<View, Props>(({ onPress, text, style, textStyle, disabled, icon }: Props, ref) => {
     return (
-        <Pressable ref={ref} disabled={disabled} style={({ pressed }) => [styles.button, pressed && styles.buttonPressed, disabled && styles.buttonDisabled, style]} onPress={onPress}>
+        <Pressable
+            ref={ref}
+            disabled={disabled}
+            style={({ pressed }) => [styles.button, pressed && styles.buttonPressed, disabled && styles.buttonDisabled, style]}
+            onPress={() => onPress && onPress()}
+        >
             {icon ? icon : <Text style={[styles.text, disabled && styles.textDisabled, textStyle]}>{text}</Text>}
         </Pressable>
     );

@@ -1,15 +1,18 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
 
 interface WorkoutContext {
-    preparationTime: number;
-    workoutTime: number;
-    restTime: number;
-    cycles: number;
-    setWorkoutTime: (workoutTime: number) => void;
-    setRestTime: (restTime: number) => void;
-    setCycles: (cycles: number) => void;
-    setPreparationTime: (preparationTime: number) => void;
+    onSetWorkoutState: (propertyName: WorkoutStateProperty, value: number) => void;
+    addSeconds: (propertyName: WorkoutStateProperty) => void;
+    subtractSeconds: (propertyName: WorkoutStateProperty) => void;
+    workoutState: {
+        preparationTime: number;
+        workoutTime: number;
+        restTime: number;
+        cycles: number;
+    };
 }
+
+export type WorkoutStateProperty = 'preparationTime' | 'workoutTime' | 'restTime' | 'cycles';
 
 const WorkoutContext = createContext<WorkoutContext | null>(null);
 
@@ -21,41 +24,38 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
         cycles: 0,
     });
 
-    const setWorkoutTime = (workoutTime: number) => {
+    const onSetWorkoutState = (propertyName: WorkoutStateProperty, value: number) => {
         setWorkoutState(prevState => ({
             ...prevState,
-            workoutTime,
-        }));
-    };
-    const setRestTime = (restTime: number) => {
-        setWorkoutState(prevState => ({
-            ...prevState,
-            restTime,
+            [propertyName]: value,
         }));
     };
 
-    const setCycles = (cycles: number) => {
+    const addSeconds = (propertyName: WorkoutStateProperty) => {
         setWorkoutState(prevState => ({
             ...prevState,
-            cycles,
+            [propertyName]: prevState[propertyName] + 1,
         }));
     };
 
-    const setPreparationTime = (preparationTime: number) => {
-        setWorkoutState(prevState => ({
-            ...prevState,
-            preparationTime,
-        }));
+    const subtractSeconds = (propertyName: WorkoutStateProperty) => {
+        setWorkoutState(prevState => {
+            if (prevState[propertyName] === 0) return prevState;
+            return {
+                ...prevState,
+                [propertyName]: prevState[propertyName] - 1,
+            };
+        });
     };
 
     return (
         <WorkoutContext.Provider
             value={{
                 ...workoutState,
-                setWorkoutTime,
-                setRestTime,
-                setCycles,
-                setPreparationTime,
+                onSetWorkoutState,
+                addSeconds,
+                subtractSeconds,
+                workoutState,
             }}
         >
             {children}
