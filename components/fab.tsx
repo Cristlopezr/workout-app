@@ -1,4 +1,4 @@
-import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 
 interface Props {
     style?: StyleProp<ViewStyle>;

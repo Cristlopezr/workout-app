@@ -1,6 +1,5 @@
 import { Pressable, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
 import { forwardRef } from 'react';
-import { useThemeContext } from '@/context/theme-context';
 
 interface Props {
     onPress?: () => void;

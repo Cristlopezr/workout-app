@@ -4,9 +4,7 @@ import Input from '@/components/input';
 import { useThemeContext } from '@/context/theme-context';
 import { useWorkoutContext, WorkoutStateProperty } from '@/context/workout-context';
 import { Add, Remove } from '@/lib/icons';
-import { AntDesign } from '@expo/vector-icons';
 import { Link } from 'expo-router';
-import { useState } from 'react';
 import { SafeAreaView, Text, View } from 'react-native';
 
 interface WorkoutSettings {
@@ -29,7 +27,7 @@ const workoutSettings: WorkoutSettings[] = [
     },
     {
         text: 'Cycles',
-        name: 'cycles',
+        name: 'numberOfCycles',
     },
 ];
 
@@ -38,7 +36,7 @@ export default function WorkoutSettingsScreen() {
 
     const { workoutState, onSetWorkoutState, addSeconds, subtractSeconds } = useWorkoutContext();
 
-    const { cycles, preparationTime, restTime, workoutTime } = workoutState;
+    const { numberOfCycles: cycles, preparationTime, restTime, workoutTime } = workoutState;
     const isStartButtonDisabled = cycles === 0 || preparationTime === 0 || restTime === 0 || workoutTime === 0;
 
     return (
