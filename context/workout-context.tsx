@@ -16,7 +16,22 @@ interface WorkoutState {
     currentCycle: number;
     time: number | undefined;
     activePhase: WorkoutTime;
+    activeColor: string;
 }
+
+interface Colors {
+    preparation: string;
+    workout: string;
+    rest: string;
+    finished: string;
+}
+
+const colors: Colors = {
+    preparation: '#FFA000',
+    workout: '#FF5722',
+    rest: '#4CAF50',
+    finished: '#673AB7',
+};
 
 type WorkoutTime = 'preparation' | 'workout' | 'rest' | 'finished';
 export type WorkoutStateProperty = 'preparationTime' | 'workoutTime' | 'restTime' | 'numberOfCycles';
@@ -32,6 +47,7 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
         time: undefined,
         activePhase: 'preparation',
         currentCycle: 1,
+        activeColor: colors['preparation'],
     });
 
     const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
@@ -75,6 +91,7 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
             return {
                 ...prevState,
                 time: 0,
+                activeColor: colors['finished'],
             };
         }
 
@@ -83,6 +100,7 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
                 ...prevState,
                 activePhase: 'workout',
                 time: prevState.workoutTime,
+                activeColor: colors['workout'],
             };
         }
 
@@ -91,6 +109,7 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
                 ...prevState,
                 activePhase: 'rest',
                 time: prevState.restTime,
+                activeColor: colors['rest'],
             };
         }
 
@@ -100,6 +119,7 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
                 activePhase: isLastCycle ? 'finished' : 'workout',
                 time: isLastCycle ? 0 : prevState.workoutTime,
                 currentCycle: isLastCycle ? prevState.numberOfCycles : prevState.currentCycle + 1,
+                activeColor: isLastCycle ? colors['finished'] : colors['workout'],
             };
         }
 
@@ -116,11 +136,12 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
             activePhase: 'preparation',
             time: prevState.preparationTime,
             currentCycle: 1,
+            activeColor: colors['preparation'],
         }));
 
         intervalIdRef.current = setInterval(() => {
             setWorkoutState(prevState => {
-                if (prevState.time === 0) {
+                if (prevState.time === 1) {
                     return changePhase(prevState);
                 }
 
