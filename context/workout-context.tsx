@@ -1,67 +1,18 @@
+import UseTimer from '@/hooks/use-timer';
+import type { WorkoutContext, WorkoutContextState, WorkoutStateProperty } from '@/interfaces/workout.interface';
 import { createContext, PropsWithChildren, useContext, useEffect, useRef, useState } from 'react';
-
-interface WorkoutContext {
-    onSetWorkoutState: (propertyName: WorkoutStateProperty, value: number) => void;
-    addSeconds: (propertyName: WorkoutStateProperty) => void;
-    subtractSeconds: (propertyName: WorkoutStateProperty) => void;
-    workoutState: WorkoutState;
-    startTimer: () => void;
-}
-
-interface WorkoutState {
-    preparationTime: number;
-    workoutTime: number;
-    restTime: number;
-    numberOfCycles: number;
-    currentCycle: number;
-    time: number | undefined;
-    activePhase: WorkoutTime;
-    activeColor: string;
-}
-
-interface Colors {
-    preparation: string;
-    workout: string;
-    rest: string;
-    finished: string;
-}
-
-const colors: Colors = {
-    preparation: '#FFA000',
-    workout: '#FF5722',
-    rest: '#4CAF50',
-    finished: '#673AB7',
-};
-
-type WorkoutTime = 'preparation' | 'workout' | 'rest' | 'finished';
-export type WorkoutStateProperty = 'preparationTime' | 'workoutTime' | 'restTime' | 'numberOfCycles';
 
 const WorkoutContext = createContext<WorkoutContext | null>(null);
 
 export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
-    const [workoutState, setWorkoutState] = useState<WorkoutState>({
+    const [workoutState, setWorkoutState] = useState<WorkoutContextState>({
         preparationTime: 0,
         workoutTime: 0,
+        numberOfCycles: 1,
         restTime: 0,
-        numberOfCycles: 0,
-        time: undefined,
-        activePhase: 'preparation',
-        currentCycle: 1,
-        activeColor: colors['preparation'],
     });
 
-    const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => {
-        if (workoutState.activePhase === 'finished') {
-            if (intervalIdRef.current) {
-                clearInterval(intervalIdRef.current);
-                intervalIdRef.current = null;
-            }
-        }
-    }, [workoutState.activePhase]);
-
-    const onSetWorkoutState = (propertyName: WorkoutStateProperty, value: number) => {
+    const onSetWorkoutContextState = (propertyName: WorkoutStateProperty, value: number) => {
         setWorkoutState(prevState => ({
             ...prevState,
             [propertyName]: value,
@@ -85,83 +36,14 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
         });
     };
 
-    const changePhase = (prevState: WorkoutState): WorkoutState => {
-        const isLastCycle = prevState.currentCycle === prevState.numberOfCycles;
-        if (prevState.activePhase === 'finished') {
-            return {
-                ...prevState,
-                time: 0,
-                activeColor: colors['finished'],
-            };
-        }
-
-        if (prevState.activePhase === 'preparation') {
-            return {
-                ...prevState,
-                activePhase: 'workout',
-                time: prevState.workoutTime,
-                activeColor: colors['workout'],
-            };
-        }
-
-        if (prevState.activePhase === 'workout') {
-            return {
-                ...prevState,
-                activePhase: 'rest',
-                time: prevState.restTime,
-                activeColor: colors['rest'],
-            };
-        }
-
-        if (prevState.activePhase === 'rest') {
-            return {
-                ...prevState,
-                activePhase: isLastCycle ? 'finished' : 'workout',
-                time: isLastCycle ? 0 : prevState.workoutTime,
-                currentCycle: isLastCycle ? prevState.numberOfCycles : prevState.currentCycle + 1,
-                activeColor: isLastCycle ? colors['finished'] : colors['workout'],
-            };
-        }
-
-        return prevState;
-    };
-
-    const startTimer = () => {
-        if (intervalIdRef.current) {
-            clearInterval(intervalIdRef.current);
-        }
-
-        setWorkoutState(prevState => ({
-            ...prevState,
-            activePhase: 'preparation',
-            time: prevState.preparationTime,
-            currentCycle: 1,
-            activeColor: colors['preparation'],
-        }));
-
-        intervalIdRef.current = setInterval(() => {
-            setWorkoutState(prevState => {
-                if (prevState.time === 1) {
-                    return changePhase(prevState);
-                }
-
-                return {
-                    ...prevState,
-                    time: prevState.time! - 1,
-                };
-            });
-        }, 1000);
-    };
-
     return (
         <WorkoutContext.Provider
             value={{
                 ...workoutState,
-                onSetWorkoutState,
+                workoutState,
+                onSetWorkoutContextState,
                 addSeconds,
                 subtractSeconds,
-                workoutState,
-                startTimer,
             }}
         >
             {children}

@@ -1,19 +1,40 @@
 import { useThemeContext } from '@/context/theme-context';
 import { useWorkoutContext } from '@/context/workout-context';
+import useTimer from '@/hooks/use-timer';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+const audiosData = {
+    whistle: require('../assets/audios/whistle.mp3'),
+    beep: require('../assets/audios/beep.mp3'),
+    shortBeep: require('../assets/audios/short-beep.mp3'),
+    buzzer: require('../assets/audios/buzzer.mp3'),
+};
 
 export default function TimerScreen() {
     const { colors } = useThemeContext();
 
     const {
-        workoutState: { time, activePhase, preparationTime, workoutTime, restTime, currentCycle, numberOfCycles, activeColor },
-        startTimer,
+        workoutState: { preparationTime, workoutTime, restTime, numberOfCycles },
     } = useWorkoutContext();
+
+    const { startTimer, time, activePhase, activeColor, currentCycle } = useTimer({
+        numberOfCycles,
+        preparationTime,
+        restTime,
+        workoutTime,
+        sounds: {
+            countdown: audiosData.beep,
+            finished: audiosData.shortBeep,
+            startRest: audiosData.buzzer,
+            startWorkout: audiosData.whistle,
+        },
+    });
 
     useEffect(() => {
         startTimer();
     }, []);
+
     return (
         <View style={[{ backgroundColor: activeColor }, styles.container]}>
             <View style={styles.timer}>

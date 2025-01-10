@@ -2,7 +2,8 @@ import Button from '@/components/button';
 import FAB from '@/components/fab';
 import Input from '@/components/input';
 import { useThemeContext } from '@/context/theme-context';
-import { useWorkoutContext, WorkoutStateProperty } from '@/context/workout-context';
+import { useWorkoutContext } from '@/context/workout-context';
+import { WorkoutStateProperty } from '@/interfaces/workout.interface';
 import { Add, Remove } from '@/lib/icons';
 import { Link } from 'expo-router';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
@@ -34,10 +35,10 @@ const workoutSettings: WorkoutSettings[] = [
 export default function WorkoutSettingsScreen() {
     const { colors } = useThemeContext();
 
-    const { workoutState, onSetWorkoutState, addSeconds, subtractSeconds } = useWorkoutContext();
+    const { workoutState, onSetWorkoutContextState, addSeconds, subtractSeconds } = useWorkoutContext();
 
-    const { numberOfCycles: cycles, preparationTime, restTime, workoutTime } = workoutState;
-    const isStartButtonDisabled = cycles === 0 || preparationTime === 0 || restTime === 0 || workoutTime === 0;
+    const { numberOfCycles, preparationTime, restTime, workoutTime } = workoutState;
+    const isStartButtonDisabled = numberOfCycles === 0 || preparationTime === 0 || restTime === 0 || workoutTime === 0;
 
     return (
         <SafeAreaView style={styles.container}>
@@ -53,7 +54,7 @@ export default function WorkoutSettingsScreen() {
                             color: colors.text,
                         }}
                         key={name}
-                        onChangeText={(value: string) => onSetWorkoutState(name, Number(value))}
+                        onChangeText={(value: string) => onSetWorkoutContextState(name, Number(value))}
                         keyboardType='numeric'
                         text={text}
                         left={<FAB onPress={() => subtractSeconds(name)} icon={<Remove color={colors.text} size={24} />} style={[{ backgroundColor: colors.action }, styles.fab]} />}
