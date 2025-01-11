@@ -1,6 +1,6 @@
 import { useThemeContext } from '@/context/theme-context';
 import { useWorkoutContext } from '@/context/workout-context';
-import useTimer from '@/hooks/use-timer';
+import useTimer from '@/hooks/useTimer';
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -8,7 +8,7 @@ const audiosData = {
     whistle: require('../assets/audios/whistle.mp3'),
     beep: require('../assets/audios/beep.mp3'),
     shortBeep: require('../assets/audios/short-beep.mp3'),
-    buzzer: require('../assets/audios/buzzer.mp3'),
+    rest: require('../assets/audios/rest.mp3'),
 };
 
 export default function TimerScreen() {
@@ -26,7 +26,7 @@ export default function TimerScreen() {
         sounds: {
             countdown: audiosData.beep,
             finished: audiosData.shortBeep,
-            startRest: audiosData.buzzer,
+            startRest: audiosData.rest,
             startWorkout: audiosData.whistle,
         },
     });

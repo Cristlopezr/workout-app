@@ -1,4 +1,4 @@
-import UseTimer from '@/hooks/use-timer';
+import UseTimer from '@/hooks/useTimer';
 import type { WorkoutContext, WorkoutContextState, WorkoutStateProperty } from '@/interfaces/workout.interface';
 import { createContext, PropsWithChildren, useContext, useEffect, useRef, useState } from 'react';
 
@@ -27,6 +27,7 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
     };
 
     const subtractSeconds = (propertyName: WorkoutStateProperty) => {
+        if (propertyName === 'numberOfCycles' && workoutState.numberOfCycles <= 1) return;
         setWorkoutState(prevState => {
             if (prevState[propertyName] === 0) return prevState;
             return {

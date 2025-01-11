@@ -7,6 +7,10 @@ export default function usePlayer() {
     const [audio, setAudio] = useState<Audio.Sound>();
 
     async function playSound(audioData: AudioData) {
+        if (!audioData) {
+            throw new Error('Invalid audioData');
+        }
+
         if (audio) {
             await audio.unloadAsync();
         }

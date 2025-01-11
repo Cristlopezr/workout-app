@@ -1,7 +1,7 @@
 import { TimerColors, TimerState } from '@/interfaces/workout.interface';
 import { AVPlaybackSource } from 'expo-av';
 import { useEffect, useRef, useState } from 'react';
-import usePlayer from './use-player';
+import usePlayer from './usePlayer';
 
 const defaultColors: TimerColors = {
     preparation: '#FFA000',
@@ -46,6 +46,15 @@ export default function useTimer({ preparationTime = 0, workoutTime = 0, restTim
             }
         }
     }, [timerState.activePhase]);
+
+    useEffect(() => {
+        return () => {
+            if (intervalIdRef.current) {
+                console.log('clearing interval');
+                clearInterval(intervalIdRef.current);
+            }
+        };
+    }, []);
 
     const changePhase = (prevState: TimerState): TimerState => {
         const isLastCycle = prevState.currentCycle === prevState.numberOfCycles;
@@ -116,10 +125,11 @@ export default function useTimer({ preparationTime = 0, workoutTime = 0, restTim
 
         intervalIdRef.current = setInterval(() => {
             setTimerState(prevState => {
-                if (prevState.time && prevState.time <= 4 && prevState.time >= 2) {
-                    if (sounds) {
-                        playSound(sounds.countdown);
-                    }
+                const isLastCycle = prevState.currentCycle === prevState.numberOfCycles;
+                const playCountdownSound =
+                    prevState.time && prevState.time <= 4 && prevState.time >= 2 && ((prevState.activePhase === 'rest' && !isLastCycle) || prevState.activePhase === 'preparation');
+                if (playCountdownSound && sounds) {
+                    playSound(sounds.countdown);
                 }
                 if (prevState.time === 1) {
                     return changePhase(prevState);
