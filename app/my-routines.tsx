@@ -1,4 +1,5 @@
 import { AsyncStorageAdapter } from '@/config/adapters/async-storage.adapter';
+import { globalStyles } from '@/config/theme/global-styles';
 import { WorkoutContextState } from '@/interfaces/workout.interface';
 import { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
@@ -25,7 +26,7 @@ export default function MyRoutinesScreen() {
     }, []);
 
     return (
-        <View>
+        <View style={globalStyles.container}>
             <Text>{JSON.stringify(workouts)}</Text>
         </View>
     );

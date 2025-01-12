@@ -1,48 +1,40 @@
-import UseTimer from '@/hooks/useTimer';
 import type { WorkoutContext, WorkoutContextState, WorkoutStateProperty } from '@/interfaces/workout.interface';
 import { createContext, PropsWithChildren, useContext, useEffect, useRef, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const WorkoutContext = createContext<WorkoutContext | null>(null);
 
 export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
-    const [workoutState, setWorkoutState] = useState<WorkoutContextState>({
-        preparationTime: 0,
-        workoutTime: 0,
-        numberOfCycles: 1,
-        restTime: 0,
-    });
-
-    const onSetWorkoutContextState = (propertyName: WorkoutStateProperty, value: number) => {
-        setWorkoutState(prevState => ({
-            ...prevState,
-            [propertyName]: value,
-        }));
-    };
+    const {
+        control,
+        formState: { errors },
+        getValues: getValuesHookForm,
+        setValue,
+        handleSubmit,
+    } = useForm<WorkoutContextState>();
 
     const addSeconds = (propertyName: WorkoutStateProperty) => {
-        setWorkoutState(prevState => ({
-            ...prevState,
-            [propertyName]: prevState[propertyName] + 1,
-        }));
+        const value = `${Number(getValuesHookForm(propertyName)) + 1}`;
+        setValue(propertyName, value, { shouldValidate: true });
     };
 
     const subtractSeconds = (propertyName: WorkoutStateProperty) => {
-        if (propertyName === 'numberOfCycles' && workoutState.numberOfCycles <= 1) return;
-        setWorkoutState(prevState => {
-            if (prevState[propertyName] === 0) return prevState;
-            return {
-                ...prevState,
-                [propertyName]: prevState[propertyName] - 1,
-            };
-        });
+        const value = `${Number(getValuesHookForm(propertyName)) - 1}`;
+        if (+value <= 0) return;
+        setValue(propertyName, value, { shouldValidate: true });
+    };
+
+    const getValues = () => {
+        return { ...getValuesHookForm() };
     };
 
     return (
         <WorkoutContext.Provider
             value={{
-                ...workoutState,
-                workoutState,
-                onSetWorkoutContextState,
+                ...getValues(),
+                handleSubmit,
+                control,
+                errors,
                 addSeconds,
                 subtractSeconds,
             }}

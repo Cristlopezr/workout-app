@@ -1,25 +1,37 @@
+import { Control, FieldValues, RegisterOptions, useController } from 'react-hook-form';
 import { KeyboardTypeOptions, StyleProp, StyleSheet, Text, TextInput, TextStyle, View } from 'react-native';
 
 interface Props {
-    placeholder?: string;
-    text: string;
+    name: string;
+    label: string;
     direction?: 'row' | 'column';
-    keyboardType?: KeyboardTypeOptions;
     right?: string | React.ReactNode;
     left?: string | React.ReactNode;
-    onChangeText: (value: string) => void;
-    style?: StyleProp<TextStyle>;
     textStyle?: StyleProp<TextStyle>;
-    value: string;
+    control: Control<any, any>;
+    placeholder?: string;
+    keyboardType: KeyboardTypeOptions;
+    style: StyleProp<TextStyle>;
+    rules?: Omit<RegisterOptions<any, string>, 'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'> | undefined;
+    defaultValue?: number | string;
 }
 
-export default function Input({ placeholder, text, direction = 'column', keyboardType, right, left, onChangeText, style, textStyle, value }: Props) {
+export default function Input({ placeholder, name, control, defaultValue, label, rules, direction = 'column', keyboardType, right, left, style, textStyle }: Props) {
+    const { field } = useController({
+        name,
+        control,
+        defaultValue,
+        rules,
+    });
+
+    const { onBlur, onChange, value } = field;
+
     return (
         <View style={styles.componentContainer}>
             <Text>{left}</Text>
             <View style={{ ...styles.inputContainer, flexDirection: direction }}>
-                <Text style={[styles.inputText, textStyle]}>{text}</Text>
-                <TextInput value={value} onChangeText={onChangeText} keyboardType={keyboardType} style={[styles.textInput, style]} placeholder={placeholder} />
+                <Text style={[styles.inputText, textStyle]}>{label}</Text>
+                <TextInput onBlur={onBlur} value={value} onChangeText={onChange} keyboardType={keyboardType} style={[styles.textInput, style]} placeholder={placeholder} />
             </View>
             <Text>{right}</Text>
         </View>

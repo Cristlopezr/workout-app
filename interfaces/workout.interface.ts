@@ -1,19 +1,22 @@
+import { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
+
 export interface WorkoutContext {
-    preparationTime: number;
-    workoutTime: number;
-    restTime: number;
-    numberOfCycles: number;
-    workoutState: WorkoutContextState;
-    onSetWorkoutContextState: (propertyName: WorkoutStateProperty, value: number) => void;
+    preparationTime: string;
+    workoutTime: string;
+    restTime: string;
+    numberOfCycles: string;
+    control: Control<WorkoutContextState, any>;
+    errors: FieldErrors<WorkoutContextState>;
+    handleSubmit: UseFormHandleSubmit<WorkoutContextState, undefined>;
     addSeconds: (name: WorkoutStateProperty) => void;
     subtractSeconds: (name: WorkoutStateProperty) => void;
 }
 
 export interface WorkoutContextState {
-    preparationTime: number;
-    workoutTime: number;
-    restTime: number;
-    numberOfCycles: number;
+    preparationTime: string;
+    workoutTime: string;
+    restTime: string;
+    numberOfCycles: string;
 }
 
 export interface TimerState {

@@ -9,6 +9,8 @@ export const darkTheme = {
         border: '#3c3c3c', // Gris oscuro
         notification: '#ff5722', // Un tono naranja fuerte
         action: '#7037eb', // Un tono naranja fuerte
+        error: '#cf6679', // Un rojo claro para errores
+        success: '#4caf50', // Un verde brillante para éxito
     },
 };
 
@@ -23,5 +25,7 @@ export const lightTheme = {
         border: '#e0e0e0', // Un gris claro
         notification: '#03a9f4', // Un azul brillante
         action: '#7037eb', // Un tono naranja fuerte
+        error: '#d32f2f', // Un rojo fuerte para errores
+        success: '#388e3c', // Un verde oscuro para éxito
     },
 };

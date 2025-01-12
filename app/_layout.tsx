@@ -45,7 +45,7 @@ function StackRouter() {
                     title: 'My workouts',
                 }}
             />
-            <Stack.Screen name='timer' />
+            <Stack.Screen name='timer' options={{ headerShown: false }} />
             <Stack.Screen
                 name='new-workout'
                 options={{

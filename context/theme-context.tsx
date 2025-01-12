@@ -13,6 +13,8 @@ interface ThemeContext {
         border: string;
         notification: string;
         action: string;
+        error: string;
+        success: string;
     };
 }
 

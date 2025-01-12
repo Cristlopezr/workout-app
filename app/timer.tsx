@@ -1,3 +1,4 @@
+import { globalStyles } from '@/config/theme/global-styles';
 import { useThemeContext } from '@/context/theme-context';
 import { useWorkoutContext } from '@/context/workout-context';
 import useTimer from '@/hooks/useTimer';
@@ -14,15 +15,13 @@ const audiosData = {
 export default function TimerScreen() {
     const { colors } = useThemeContext();
 
-    const {
-        workoutState: { preparationTime, workoutTime, restTime, numberOfCycles },
-    } = useWorkoutContext();
+    const { preparationTime, workoutTime, restTime, numberOfCycles } = useWorkoutContext();
 
     const { startTimer, time, activePhase, activeColor, currentCycle } = useTimer({
-        numberOfCycles,
-        preparationTime,
-        restTime,
-        workoutTime,
+        numberOfCycles: +numberOfCycles,
+        preparationTime: +preparationTime,
+        restTime: +restTime,
+        workoutTime: +workoutTime,
         sounds: {
             countdown: audiosData.beep,
             finished: audiosData.shortBeep,
@@ -36,7 +35,7 @@ export default function TimerScreen() {
     }, []);
 
     return (
-        <View style={[{ backgroundColor: activeColor }, styles.container]}>
+        <View style={[globalStyles.container, { backgroundColor: activeColor }, styles.container]}>
             <View style={styles.timer}>
                 <Text style={[{ color: colors.text }, styles.timeLeft]}>{time}</Text>
                 <Text style={[{ color: colors.text }, styles.timerPhase]}>{activePhase.toUpperCase()}</Text>
@@ -55,11 +54,8 @@ export default function TimerScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingBottom: 20,
-        paddingHorizontal: 10,
     },
     timer: {
         flex: 1,
