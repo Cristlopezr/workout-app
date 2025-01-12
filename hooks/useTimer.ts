@@ -40,19 +40,13 @@ export default function useTimer({ preparationTime = 0, workoutTime = 0, restTim
 
     useEffect(() => {
         if (timerState.activePhase === 'finished') {
-            if (intervalIdRef.current) {
-                clearInterval(intervalIdRef.current);
-                intervalIdRef.current = null;
-            }
+            clearIntervalId();
         }
     }, [timerState.activePhase]);
 
     useEffect(() => {
         return () => {
-            if (intervalIdRef.current) {
-                console.log('clearing interval');
-                clearInterval(intervalIdRef.current);
-            }
+            clearIntervalId();
         };
     }, []);
 
@@ -110,10 +104,16 @@ export default function useTimer({ preparationTime = 0, workoutTime = 0, restTim
         return prevState;
     };
 
-    const startTimer = () => {
+    const clearIntervalId = () => {
         if (intervalIdRef.current) {
+            console.log('clearing interval');
             clearInterval(intervalIdRef.current);
+            intervalIdRef.current = null;
         }
+    };
+
+    const startTimer = () => {
+        clearIntervalId();
 
         setTimerState(prevState => ({
             ...prevState,

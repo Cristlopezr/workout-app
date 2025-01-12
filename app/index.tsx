@@ -67,7 +67,9 @@ export default function WorkoutSettingsScreen() {
                 <Button disabled={isStartButtonDisabled} style={{ backgroundColor: colors.action, opacity: isStartButtonDisabled ? 0.5 : 1 }} text='Start' />
             </Link>
 
-            <FAB onPress={() => {}} icon={<Add color={colors.text} size={28} />} style={{ backgroundColor: colors.action, bottom: 120 }} />
+            <Link href='/new-workout' asChild>
+                <FAB icon={<Add color={colors.text} size={28} />} style={{ backgroundColor: colors.action, bottom: 120 }} />
+            </Link>
         </SafeAreaView>
     );
 }
@@ -76,7 +78,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 10,
-        paddingVertical: 40,
+        paddingVertical: 20,
         justifyContent: 'space-between',
     },
     fab: {

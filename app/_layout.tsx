@@ -1,6 +1,6 @@
 import { ThemeContextProvider, useThemeContext } from '@/context/theme-context';
 import { WorkoutContextProvider } from '@/context/workout-context';
-import { Stack } from 'expo-router';
+import { Link, Stack } from 'expo-router';
 
 export default function RootLayout() {
     return (
@@ -18,15 +18,40 @@ function StackRouter() {
     return (
         <Stack
             screenOptions={{
-                headerShown: false,
+                headerStyle: {
+                    backgroundColor: colors.background,
+                },
                 contentStyle: {
                     backgroundColor: colors.background,
                 },
+                headerTintColor: colors.text,
+                headerTitleAlign: 'center',
             }}
         >
-            <Stack.Screen name='index' />
-            <Stack.Screen name='my-routines' />
+            <Stack.Screen
+                name='index'
+                options={{
+                    title: '',
+                    headerRight: () => (
+                        <Link href='/my-routines' style={{ color: colors.text, fontSize: 20 }}>
+                            My workouts
+                        </Link>
+                    ),
+                }}
+            />
+            <Stack.Screen
+                name='my-routines'
+                options={{
+                    title: 'My workouts',
+                }}
+            />
             <Stack.Screen name='timer' />
+            <Stack.Screen
+                name='new-workout'
+                options={{
+                    title: 'New workout',
+                }}
+            />
         </Stack>
     );
 }

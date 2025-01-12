@@ -1,18 +1,21 @@
-import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from 'react-native';
+import { forwardRef } from 'react';
 
 interface Props {
     style?: StyleProp<ViewStyle>;
     icon: React.ReactNode;
-    onPress: () => void;
+    onPress?: () => void;
 }
 
-export default function FAB({ style, icon, onPress }: Props) {
+const FAB = forwardRef<View, Props>(({ style, icon, onPress }: Props, ref) => {
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.fab, style]}>
+        <TouchableOpacity ref={ref} onPress={() => onPress && onPress()} style={[styles.fab, style]}>
             {icon}
         </TouchableOpacity>
     );
-}
+});
+
+export default FAB;
 
 const styles = StyleSheet.create({
     fab: {
