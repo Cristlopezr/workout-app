@@ -1,6 +1,7 @@
 import { ThemeContextProvider, useThemeContext } from '@/context/theme-context';
 import { WorkoutContextProvider } from '@/context/workout-context';
 import { Link, Stack } from 'expo-router';
+import { Workout } from '@/lib/icons';
 
 export default function RootLayout() {
     return (
@@ -33,8 +34,8 @@ function StackRouter() {
                 options={{
                     title: '',
                     headerRight: () => (
-                        <Link href='/my-routines' style={{ color: colors.text, fontSize: 20 }}>
-                            My workouts
+                        <Link href='/my-routines'>
+                            <Workout color={colors.action} size={35} />
                         </Link>
                     ),
                 }}

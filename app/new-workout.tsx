@@ -2,7 +2,9 @@ import Button from '@/components/button';
 import Input from '@/components/input';
 import { globalStyles } from '@/config/theme/global-styles';
 import { useThemeContext } from '@/context/theme-context';
-import { Controller, RegisterOptions, useForm } from 'react-hook-form';
+import { useWorkoutContext } from '@/context/workout-context';
+import { router } from 'expo-router';
+import { RegisterOptions, useForm } from 'react-hook-form';
 import { FlatList, KeyboardTypeOptions, ScrollView, Text, View } from 'react-native';
 
 type Inputs = {
@@ -10,7 +12,7 @@ type Inputs = {
     preparationTime: string;
     workoutTime: string;
     restTime: string;
-    numberOfCyles: string;
+    numberOfCycles: string;
 };
 
 type Item = {
@@ -26,10 +28,6 @@ const items: Item[] = [
         label: 'Name',
         keyboardType: 'default',
         rules: {
-            pattern: {
-                value: /^[A-Za-z]+$/,
-                message: 'Only letters are allowed',
-            },
             required: {
                 value: true,
                 message: 'Name is required',
@@ -82,7 +80,7 @@ const items: Item[] = [
         },
     },
     {
-        name: 'numberOfCyles',
+        name: 'numberOfCycles',
         label: 'Number of cyles',
         keyboardType: 'numeric',
         rules: {
@@ -100,6 +98,7 @@ const items: Item[] = [
 
 export default function NewWorkoutScreen() {
     const { colors } = useThemeContext();
+    const { onSaveWorkout } = useWorkoutContext();
 
     const {
         handleSubmit,
@@ -107,13 +106,22 @@ export default function NewWorkoutScreen() {
         formState: { errors },
     } = useForm<Inputs>();
 
-    const onSubmit = (data: Inputs) => {
-        //TODO:Save new workout
-        console.log(data);
+    const onSubmit = async (data: Inputs) => {
+        try {
+            const workout = {
+                id: Date.now().toString(),
+                ...data,
+            };
+            await onSaveWorkout(workout);
+            router.replace('/my-routines');
+        } catch (error) {
+            //TODO:create state and show error
+            console.log(error);
+        }
     };
 
     return (
-        <View style={[globalStyles.container, { paddingBottom: 50 }]}>
+        <View style={[globalStyles.container]}>
             <FlatList
                 data={items}
                 ItemSeparatorComponent={() => <View style={{ height: 10 }} />}

@@ -1,18 +1,26 @@
-import { Control, FieldErrors, UseFormHandleSubmit } from 'react-hook-form';
-
 export interface WorkoutContext {
     preparationTime: string;
     workoutTime: string;
     restTime: string;
     numberOfCycles: string;
-    control: Control<WorkoutContextState, any>;
-    errors: FieldErrors<WorkoutContextState>;
-    handleSubmit: UseFormHandleSubmit<WorkoutContextState, undefined>;
-    addSeconds: (name: WorkoutStateProperty) => void;
-    subtractSeconds: (name: WorkoutStateProperty) => void;
+    workouts: Workout[];
+    activeWorkout: WorkoutContextState;
+    onSetActiveWorkout: (workout: WorkoutContextState) => void;
+    onSaveWorkout: (workout: Workout) => void;
+}
+
+export interface Workout {
+    id: string;
+    name: string;
+    preparationTime: string;
+    workoutTime: string;
+    restTime: string;
+    numberOfCycles: string;
 }
 
 export interface WorkoutContextState {
+    id?: string;
+    name?: string;
     preparationTime: string;
     workoutTime: string;
     restTime: string;

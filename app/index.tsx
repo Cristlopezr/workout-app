@@ -4,14 +4,14 @@ import Input from '@/components/input';
 import { globalStyles } from '@/config/theme/global-styles';
 import { useThemeContext } from '@/context/theme-context';
 import { useWorkoutContext } from '@/context/workout-context';
-import { WorkoutContextState } from '@/interfaces/workout.interface';
+import { WorkoutContextState, WorkoutStateProperty } from '@/interfaces/workout.interface';
 import { Add, Remove } from '@/lib/icons';
 import { Link, router } from 'expo-router';
-import { RegisterOptions } from 'react-hook-form';
+import { RegisterOptions, useForm } from 'react-hook-form';
 import { FlatList, KeyboardTypeOptions, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
 type Item = {
-    name: keyof WorkoutContextState;
+    name: WorkoutStateProperty;
     defaultValue: string;
     label: string;
     keyboardType: KeyboardTypeOptions;
@@ -21,7 +21,7 @@ type Item = {
 const items: Item[] = [
     {
         name: 'preparationTime',
-        defaultValue: '1',
+        defaultValue: '',
         label: 'Preparation',
         keyboardType: 'numeric',
         rules: {
@@ -34,7 +34,7 @@ const items: Item[] = [
     },
     {
         name: 'workoutTime',
-        defaultValue: '1',
+        defaultValue: '',
         label: 'Workout',
         keyboardType: 'numeric',
         rules: {
@@ -47,7 +47,7 @@ const items: Item[] = [
     },
     {
         name: 'restTime',
-        defaultValue: '1',
+        defaultValue: '',
         label: 'Rest',
         keyboardType: 'numeric',
         rules: {
@@ -60,7 +60,7 @@ const items: Item[] = [
     },
     {
         name: 'numberOfCycles',
-        defaultValue: '1',
+        defaultValue: '',
         label: 'Cycles',
         keyboardType: 'numeric',
         rules: {
@@ -76,10 +76,35 @@ const items: Item[] = [
 export default function WorkoutSettingsScreen() {
     const { colors } = useThemeContext();
 
-    const { addSeconds, subtractSeconds, control, errors, handleSubmit } = useWorkoutContext();
+    const {
+        control,
+        formState: { errors },
+        getValues,
+        setValue,
+        handleSubmit,
+    } = useForm<WorkoutContextState>();
+
+    const { onSetActiveWorkout } = useWorkoutContext();
 
     const onSubmit = () => {
+        onSetActiveWorkout({ ...getValues() });
         router.push('/timer');
+    };
+
+    const addSeconds = (propertyName: WorkoutStateProperty) => {
+        if (getValues(propertyName) === '') {
+            setValue(propertyName, '1', { shouldValidate: true });
+            return;
+        }
+        const value = `${Number(getValues(propertyName)) + 1}`;
+        setValue(propertyName, value, { shouldValidate: true });
+    };
+
+    const subtractSeconds = (propertyName: WorkoutStateProperty) => {
+        if (getValues(propertyName) === '') return;
+        const value = `${Number(getValues(propertyName)) - 1}`;
+        if (+value <= 0) return;
+        setValue(propertyName, value, { shouldValidate: true });
     };
 
     return (
@@ -112,7 +137,7 @@ export default function WorkoutSettingsScreen() {
 
             <Button style={{ backgroundColor: colors.action }} text='Start' onPress={handleSubmit(onSubmit)} />
             <Link href='/new-workout' asChild>
-                <FAB icon={<Add color={colors.text} size={28} />} style={{ backgroundColor: colors.action, bottom: 120 }} />
+                <FAB icon={<Add color={colors.text} size={28} />} style={{ backgroundColor: colors.action, bottom: 100 }} />
             </Link>
         </SafeAreaView>
     );
