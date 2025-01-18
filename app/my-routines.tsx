@@ -19,7 +19,7 @@ export default function MyRoutinesScreen() {
     };
 
     return (
-        <View style={[globalStyles.container, { paddingVertical: 0 }]}>
+        <View style={[globalStyles.container]}>
             {workouts.length === 0 ? (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <Text style={{ color: colors.text, fontSize: 20, fontWeight: 'bold' }}>Your workout list is empty.</Text>
@@ -36,30 +36,30 @@ export default function MyRoutinesScreen() {
                                 <View
                                     style={{
                                         borderWidth: 1,
-                                        backgroundColor: isActiveItem ? colors.card : colors.background,
+                                        backgroundColor: isActiveItem ? colors.background : colors.card,
                                         borderColor: colors.border,
                                         padding: 10,
                                         borderRadius: 5,
-                                        paddingBottom: 40,
+                                        paddingBottom: 45,
                                     }}
                                 >
                                     <Text style={{ color: colors.text }}>
                                         {item.name}: Preparation({item.preparationTime}) - Workout({item.workoutTime}) - Rest({item.restTime}) - Cycles({item.numberOfCycles})
                                     </Text>
-                                    <View style={{ position: 'absolute', right: 10, bottom: 5, flex: 1, flexDirection: 'row', gap: 20 }}>
+                                    <View style={{ position: 'absolute', right: 10, bottom: 8, flex: 1, flexDirection: 'row', gap: 20 }}>
                                         <Button
                                             disabled={isActiveItem}
                                             onPress={() => onSelectWorkout(item)}
                                             text='Select'
-                                            style={{ paddingVertical: 5, paddingHorizontal: 10, backgroundColor: colors.action }}
-                                            textStyle={{ color: colors.text }}
+                                            style={{ paddingVertical: 4, paddingHorizontal: 10, backgroundColor: colors.action }}
+                                            textStyle={{ color: colors.text, fontSize: 14 }}
                                         />
                                         <Button
                                             onPress={onStartWorkout}
                                             disabled={!isActiveItem}
                                             text='Start'
-                                            style={{ paddingVertical: 5, paddingHorizontal: 10, backgroundColor: colors.action }}
-                                            textStyle={{ color: colors.text }}
+                                            style={{ paddingVertical: 4, paddingHorizontal: 10, backgroundColor: colors.action }}
+                                            textStyle={{ color: colors.text, fontSize: 14 }}
                                         />
                                     </View>
                                 </View>

@@ -1,31 +1,33 @@
 export const darkTheme = {
     dark: true,
     colors: {
-        primary: '#1e1e1e', // Un gris oscuro cercano al negro
-        background: '#121212', // Un tono de gris aún más oscuro
-        card: '#2b2b2b', // Un gris medio
-        text: '#e5e5e5', // Un blanco grisáceo suave
-        lightText: '#f0f0f0', // Un blanco grisáceo aún más suave
-        border: '#3c3c3c', // Gris oscuro
-        notification: '#ff5722', // Un tono naranja fuerte
-        action: '#7037eb', // Un tono naranja fuerte
-        error: '#cf6679', // Un rojo claro para errores
-        success: '#4caf50', // Un verde brillante para éxito
+        primary: '#1e88e5', // A calm yet vibrant blue for 60% dominance
+        background: '#121212', // Deep black for background
+        card: '#1c1c1c', // Charcoal gray for 30% secondary usage
+        text: '#e5e5e5', // Soft white for readability (paired with secondary)
+        lightText: '#bdbdbd', // Light gray for subtitles or secondary text
+        border: '#3c3c3c', // Subtle gray for borders
+        notification: '#ff6b6b', // Bright red-orange as a 10% accent
+        action: '#ff9800', // Vibrant orange for actions
+        error: '#e53935', // Strong red for errors
+        success: '#43a047', // Bright green for success
+        highlight: '#ffca28', // Yellow for additional small accents (optional)
     },
 };
 
 export const lightTheme = {
     dark: false,
     colors: {
-        primary: '#6200ea', // Un tono púrpura fuerte
-        background: '#f5f5f5', // Un gris muy claro
-        card: '#ffffff', // Blanco puro
-        text: '#333333', // Un gris oscuro
-        lightText: '#666666', // Un gris un poco más claro
-        border: '#e0e0e0', // Un gris claro
-        notification: '#03a9f4', // Un azul brillante
-        action: '#7037eb', // Un tono naranja fuerte
-        error: '#d32f2f', // Un rojo fuerte para errores
-        success: '#388e3c', // Un verde oscuro para éxito
+        primary: '#03a9f4', // Bright blue for 60% dominance
+        background: '#ffffff', // Clean white for background
+        card: '#f5f5f5', // Light gray for 30% secondary usage
+        text: '#212121', // Deep black for readability (paired with secondary)
+        lightText: '#757575', // Medium gray for subtitles or secondary text
+        border: '#e0e0e0', // Subtle gray for borders
+        notification: '#ff5722', // Bright orange as a 10% accent
+        action: '#f57c00', // Energetic orange for actions
+        error: '#d32f2f', // Bold red for errors
+        success: '#388e3c', // Rich green for success
+        highlight: '#ffc107', // Gold for small accents (optional)
     },
 };

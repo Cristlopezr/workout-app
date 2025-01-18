@@ -135,7 +135,7 @@ export default function WorkoutSettingsScreen() {
                 )}
             />
 
-            <Button style={{ backgroundColor: colors.action }} text='Start' onPress={handleSubmit(onSubmit)} />
+            <Button style={{ backgroundColor: colors.action }} text='Start' onPress={handleSubmit(onSubmit)} textStyle={{ color: colors.text }} />
             <Link href='/new-workout' asChild>
                 <FAB icon={<Add color={colors.text} size={28} />} style={{ backgroundColor: colors.action, bottom: 100 }} />
             </Link>

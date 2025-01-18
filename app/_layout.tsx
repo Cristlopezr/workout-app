@@ -19,6 +19,7 @@ function StackRouter() {
     return (
         <Stack
             screenOptions={{
+                headerShadowVisible:false,
                 headerStyle: {
                     backgroundColor: colors.background,
                 },
