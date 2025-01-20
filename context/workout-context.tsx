@@ -17,7 +17,6 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
     });
 
     const [workouts, setWorkouts] = useState<Workout[]>([]);
-    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         getWorkouts();
@@ -29,24 +28,45 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
 
     const getWorkouts = async () => {
         try {
-            const workouts = await AsyncStorageAdapter.getItem(STORAGE_KEY);
+            const workouts = await AsyncStorageAdapter.getItem<Workout[]>(STORAGE_KEY);
             if (workouts) {
                 setWorkouts(workouts);
             }
         } catch (error) {
             console.log(error);
-            throw new Error(`An error has ocurred: ${error}`);
+            throw new Error(`An error has ocurred getting workouts: ${error}`);
         }
     };
 
     const onSaveWorkout = async (newWorkout: Workout) => {
         const newWorkouts = [...workouts, newWorkout];
         try {
-            await AsyncStorageAdapter.saveItem(STORAGE_KEY, JSON.stringify(newWorkouts));
+            await AsyncStorageAdapter.setItem(STORAGE_KEY, JSON.stringify(newWorkouts));
             setWorkouts(newWorkouts);
         } catch (error) {
             console.log(error);
-            throw new Error(`An error has ocurred: ${error}`);
+            throw new Error(`An error has ocurred saving a workout: ${error}`);
+        }
+    };
+
+    const onDeleteWorkout = async (workoutToDelete: Workout) => {
+        const remainingWorkouts = workouts.filter(workout => workout.id !== workoutToDelete.id);
+        try {
+            await AsyncStorageAdapter.setItem(STORAGE_KEY, JSON.stringify(remainingWorkouts));
+            setWorkouts(remainingWorkouts);
+        } catch (error) {
+            console.log(error);
+            throw new Error(`An error has ocurred deleting a workout: ${error}`);
+        }
+    };
+
+    const onDeleteAllWorkouts = async () => {
+        try {
+            await AsyncStorageAdapter.removeItem(STORAGE_KEY);
+            setWorkouts([]);
+        } catch (error) {
+            console.log(error);
+            throw new Error(`An error has ocurred deleting workouts: ${error}`);
         }
     };
 
@@ -58,6 +78,8 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
                 onSetActiveWorkout,
                 workouts,
                 onSaveWorkout,
+                onDeleteWorkout,
+                onDeleteAllWorkouts,
             }}
         >
             {children}

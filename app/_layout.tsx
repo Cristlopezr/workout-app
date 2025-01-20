@@ -1,7 +1,7 @@
 import { ThemeContextProvider, useThemeContext } from '@/context/theme-context';
 import { WorkoutContextProvider } from '@/context/workout-context';
-import { Link, Stack } from 'expo-router';
-import { Workout } from '@/lib/icons';
+import { Stack } from 'expo-router';
+import HeaderRight from '@/components/router/index-screen/header-right';
 
 export default function RootLayout() {
     return (
@@ -19,7 +19,7 @@ function StackRouter() {
     return (
         <Stack
             screenOptions={{
-                headerShadowVisible:false,
+                headerShadowVisible: false,
                 headerStyle: {
                     backgroundColor: colors.background,
                 },
@@ -34,11 +34,7 @@ function StackRouter() {
                 name='index'
                 options={{
                     title: '',
-                    headerRight: () => (
-                        <Link href='/my-routines'>
-                            <Workout color={colors.action} size={35} />
-                        </Link>
-                    ),
+                    headerRight: () => <HeaderRight />,
                 }}
             />
             <Stack.Screen

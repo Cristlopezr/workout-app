@@ -12,7 +12,7 @@ interface Props {
 
 const Button = forwardRef<View, Props>(({ onPress, text, style, textStyle, disabled, icon }: Props, ref) => {
     return (
-        <Pressable ref={ref} disabled={disabled} style={({ pressed }) => [styles.button, style, pressed && { opacity: 0.5 }, disabled && { opacity: 0.5 }]} onPress={() => onPress && onPress()}>
+        <Pressable ref={ref} disabled={disabled} style={({ pressed }) => [styles.button, style, pressed && { opacity: 0.8 }, disabled && { opacity: 0.5 }]} onPress={() => onPress && onPress()}>
             {icon ? icon : <Text style={[styles.text, disabled && styles.textDisabled, textStyle]}>{text}</Text>}
         </Pressable>
     );

@@ -121,7 +121,7 @@ export default function NewWorkoutScreen() {
     };
 
     return (
-        <View style={[globalStyles.container]}>
+        <View style={[globalStyles.container, { gap: 20 }]}>
             <FlatList
                 data={items}
                 ItemSeparatorComponent={() => <View style={{ height: 10 }} />}

@@ -2,12 +2,13 @@ import Button from '@/components/button';
 import { globalStyles } from '@/config/theme/global-styles';
 import { useThemeContext } from '@/context/theme-context';
 import { useWorkoutContext } from '@/context/workout-context';
+import { createAlert } from '@/helpers/create-alert';
 import { Workout } from '@/interfaces/workout.interface';
 import { router } from 'expo-router';
 import { FlatList, Text, View } from 'react-native';
 
 export default function MyRoutinesScreen() {
-    const { workouts, activeWorkout, onSetActiveWorkout } = useWorkoutContext();
+    const { workouts, activeWorkout, onSetActiveWorkout, onDeleteAllWorkouts, onDeleteWorkout } = useWorkoutContext();
     const { colors } = useThemeContext();
 
     const onSelectWorkout = (workout: Workout) => {
@@ -18,6 +19,27 @@ export default function MyRoutinesScreen() {
         router.replace('/timer');
     };
 
+    const onDeleteAll = () => {
+        createAlert({
+            title: 'Are you sure?',
+            message: `This can't be undone`,
+            buttons: [
+                {
+                    text: 'Ok',
+                    onPress: () => onDeleteAllWorkouts(),
+                },
+                {
+                    text: 'Cancel',
+                    onPress: () => undefined,
+                },
+            ],
+        });
+    };
+
+    const onDeleteSingleWorkout = (workout: Workout) => {
+        onDeleteWorkout(workout);
+    };
+
     return (
         <View style={[globalStyles.container]}>
             {workouts.length === 0 ? (
@@ -26,7 +48,7 @@ export default function MyRoutinesScreen() {
                     <Text style={{ color: colors.text, fontSize: 20, fontWeight: 'bold' }}>Time to add some!</Text>
                 </View>
             ) : (
-                <View>
+                <View style={{ flex: 1, gap: 20 }}>
                     <FlatList
                         data={workouts}
                         ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
@@ -66,6 +88,7 @@ export default function MyRoutinesScreen() {
                             );
                         }}
                     />
+                    <Button onPress={onDeleteAll} text='Delete all workouts' style={{ backgroundColor: colors.error }} textStyle={{ color: 'white' }} />
                 </View>
             )}
         </View>

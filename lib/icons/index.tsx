@@ -9,3 +9,5 @@ interface Props {
 export const Add = ({ size = 24, color = 'black' }: Props) => <Ionicons name='add' size={size} color={color} />;
 export const Remove = ({ size = 24, color = 'black' }: Props) => <Ionicons name='remove' size={size} color={color} />;
 export const Workout = ({ size = 24, color = 'black' }: Props) => <MaterialIcons name='directions-run' size={size} color={color} />;
+export const Moon = ({ size = 24, color = 'black' }: Props) => <Ionicons name='moon-outline' size={size} color={color} />;
+export const Sunny = ({ size = 24, color = 'black' }: Props) => <Ionicons name='sunny-outline' size={size} color={color} />;

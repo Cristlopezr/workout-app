@@ -1,6 +1,7 @@
+import { AsyncStorageAdapter } from '@/config/adapters/async-storage.adapter';
 import { darkTheme, lightTheme } from '@/config/theme/themeColors';
-import { createContext, PropsWithChildren, useContext } from 'react';
-import { useColorScheme } from 'react-native';
+import { createContext, PropsWithChildren, useContext, useEffect } from 'react';
+import { Appearance, useColorScheme } from 'react-native';
 
 interface ThemeContext {
     dark: boolean;
@@ -20,8 +21,21 @@ interface ThemeContext {
 
 const ThemeContext = createContext<ThemeContext | null>(null);
 
+const getThemeFromStorage = async () => {
+    try {
+        const theme = await AsyncStorageAdapter.getItem<'dark' | 'light'>('theme');
+        if (theme) Appearance.setColorScheme(theme);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const ThemeContextProvider = ({ children }: PropsWithChildren) => {
     const theme = useColorScheme() === 'light' ? lightTheme : darkTheme;
+
+    useEffect(() => {
+        getThemeFromStorage();
+    }, []);
 
     return <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>;
 };

@@ -7,6 +7,8 @@ export interface WorkoutContext {
     activeWorkout: WorkoutContextState;
     onSetActiveWorkout: (workout: WorkoutContextState) => void;
     onSaveWorkout: (workout: Workout) => void;
+    onDeleteWorkout: (workout: Workout) => void;
+    onDeleteAllWorkouts: () => void;
 }
 
 export interface Workout {
