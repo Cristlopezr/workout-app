@@ -39,7 +39,7 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
     };
 
     const onSaveWorkout = async (newWorkout: Workout) => {
-        const newWorkouts = [...workouts, newWorkout];
+        const newWorkouts = [...workouts.filter(workout => workout.id !== newWorkout.id), newWorkout];
         try {
             await AsyncStorageAdapter.setItem(STORAGE_KEY, JSON.stringify(newWorkouts));
             setWorkouts(newWorkouts);

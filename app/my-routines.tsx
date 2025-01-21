@@ -54,6 +54,13 @@ export default function MyRoutinesScreen() {
         });
     };
 
+    const onEditWorkout = (id: string) => {
+        router.push({
+            pathname: '/edit-workout/[id]',
+            params: { id },
+        });
+    };
+
     return (
         <View style={[globalStyles.container]}>
             {workouts.length === 0 ? (
@@ -74,7 +81,7 @@ export default function MyRoutinesScreen() {
                             renderItem={({ item }) => {
                                 const isActiveItem = item.id === activeWorkout.id;
                                 return (
-                                    <Pressable onPress={() => onSelectWorkout(item)}>
+                                    <Pressable onPress={() => onSelectWorkout(item)} onLongPress={() => onEditWorkout(item.id)}>
                                         <View
                                             style={{
                                                 borderWidth: 1,

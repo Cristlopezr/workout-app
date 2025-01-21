@@ -50,6 +50,12 @@ function StackRouter() {
                     title: 'New workout',
                 }}
             />
+            <Stack.Screen
+                name='edit-workout/[id]'
+                options={{
+                    title: 'Edit workout',
+                }}
+            />
         </Stack>
     );
 }

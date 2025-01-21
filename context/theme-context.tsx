@@ -16,6 +16,7 @@ interface ThemeContext {
         action: string;
         error: string;
         success: string;
+        highlight:string;
     };
 }
 
