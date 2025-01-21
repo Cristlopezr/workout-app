@@ -4,8 +4,9 @@ import { useThemeContext } from '@/context/theme-context';
 import { useWorkoutContext } from '@/context/workout-context';
 import { createAlert } from '@/helpers/create-alert';
 import { Workout } from '@/interfaces/workout.interface';
+import { Delete } from '@/lib/icons';
 import { router } from 'expo-router';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 
 export default function MyRoutinesScreen() {
     const { workouts, activeWorkout, onSetActiveWorkout, onDeleteAllWorkouts, onDeleteWorkout } = useWorkoutContext();
@@ -36,8 +37,21 @@ export default function MyRoutinesScreen() {
         });
     };
 
-    const onDeleteSingleWorkout = (workout: Workout) => {
-        onDeleteWorkout(workout);
+    const onDeleteSingleWorkout = (id: string) => {
+        createAlert({
+            title: 'Are you sure?',
+            message: `This can't be undone`,
+            buttons: [
+                {
+                    text: 'Ok',
+                    onPress: () => onDeleteWorkout(id),
+                },
+                {
+                    text: 'Cancel',
+                    onPress: () => undefined,
+                },
+            ],
+        });
     };
 
     return (
@@ -49,46 +63,50 @@ export default function MyRoutinesScreen() {
                 </View>
             ) : (
                 <View style={{ flex: 1, gap: 20 }}>
-                    <FlatList
-                        data={workouts}
-                        ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
-                        renderItem={({ item }) => {
-                            const isActiveItem = item.id === activeWorkout.id;
-                            return (
-                                <View
-                                    style={{
-                                        borderWidth: 1,
-                                        backgroundColor: isActiveItem ? colors.background : colors.card,
-                                        borderColor: colors.border,
-                                        padding: 10,
-                                        borderRadius: 5,
-                                        paddingBottom: 45,
-                                    }}
-                                >
-                                    <Text style={{ color: colors.text }}>
-                                        {item.name}: Preparation({item.preparationTime}) - Workout({item.workoutTime}) - Rest({item.restTime}) - Cycles({item.numberOfCycles})
-                                    </Text>
-                                    <View style={{ position: 'absolute', right: 10, bottom: 8, flex: 1, flexDirection: 'row', gap: 20 }}>
-                                        <Button
-                                            disabled={isActiveItem}
-                                            onPress={() => onSelectWorkout(item)}
-                                            text='Select'
-                                            style={{ paddingVertical: 4, paddingHorizontal: 10, backgroundColor: colors.action }}
-                                            textStyle={{ color: colors.text, fontSize: 14 }}
-                                        />
-                                        <Button
-                                            onPress={onStartWorkout}
-                                            disabled={!isActiveItem}
-                                            text='Start'
-                                            style={{ paddingVertical: 4, paddingHorizontal: 10, backgroundColor: colors.action }}
-                                            textStyle={{ color: colors.text, fontSize: 14 }}
-                                        />
-                                    </View>
-                                </View>
-                            );
-                        }}
-                    />
-                    <Button onPress={onDeleteAll} text='Delete all workouts' style={{ backgroundColor: colors.error }} textStyle={{ color: 'white' }} />
+                    <View>
+                        <Text style={{ color: colors.text, textAlign: 'center' }}>Simply tap on a workout to choose it.</Text>
+                        <Text style={{ color: colors.text, textAlign: 'center' }}>Long press to edit.</Text>
+                    </View>
+                    <View style={{ gap: 20 }}>
+                        <FlatList
+                            data={workouts}
+                            ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
+                            renderItem={({ item }) => {
+                                const isActiveItem = item.id === activeWorkout.id;
+                                return (
+                                    <Pressable onPress={() => onSelectWorkout(item)}>
+                                        <View
+                                            style={{
+                                                borderWidth: 1,
+                                                backgroundColor: isActiveItem ? colors.background : colors.card,
+                                                borderColor: isActiveItem ? colors.action : colors.border,
+                                                padding: 10,
+                                                borderRadius: 5,
+                                                paddingBottom: 45,
+                                            }}
+                                        >
+                                            <Text style={{ color: colors.text }}>
+                                                {item.name}: Preparation({item.preparationTime}) - Workout({item.workoutTime}) - Rest({item.restTime}) - Cycles({item.numberOfCycles})
+                                            </Text>
+                                            <View style={{ position: 'absolute', right: 10, bottom: 8, flex: 1, flexDirection: 'row', gap: 20 }}>
+                                                <Button
+                                                    onPress={onStartWorkout}
+                                                    disabled={!isActiveItem}
+                                                    text='Start'
+                                                    style={{ paddingVertical: 4, paddingHorizontal: 10, backgroundColor: colors.action }}
+                                                    textStyle={{ color: colors.text, fontSize: 14 }}
+                                                />
+                                                <Pressable onPress={() => onDeleteSingleWorkout(item.id)}>
+                                                    <Delete color={colors.error} />
+                                                </Pressable>
+                                            </View>
+                                        </View>
+                                    </Pressable>
+                                );
+                            }}
+                        />
+                    </View>
+                    <Button onPress={onDeleteAll} text='Delete all workouts' style={{ backgroundColor: colors.error, marginTop: 'auto' }} textStyle={{ color: colors.text }} />
                 </View>
             )}
         </View>

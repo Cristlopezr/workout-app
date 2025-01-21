@@ -49,8 +49,8 @@ export const WorkoutContextProvider = ({ children }: PropsWithChildren) => {
         }
     };
 
-    const onDeleteWorkout = async (workoutToDelete: Workout) => {
-        const remainingWorkouts = workouts.filter(workout => workout.id !== workoutToDelete.id);
+    const onDeleteWorkout = async (id: string) => {
+        const remainingWorkouts = workouts.filter(workout => workout.id !== id);
         try {
             await AsyncStorageAdapter.setItem(STORAGE_KEY, JSON.stringify(remainingWorkouts));
             setWorkouts(remainingWorkouts);
