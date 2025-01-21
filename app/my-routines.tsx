@@ -76,7 +76,7 @@ export default function MyRoutinesScreen() {
                     </View>
                     <View style={{ gap: 20 }}>
                         <FlatList
-                            data={workouts}
+                            data={[...workouts].sort((a, b) => Number(b.id) - Number(a.id))}
                             ItemSeparatorComponent={() => <View style={{ height: 20 }}></View>}
                             renderItem={({ item }) => {
                                 const isActiveItem = item.id === activeWorkout.id;
@@ -93,7 +93,8 @@ export default function MyRoutinesScreen() {
                                             }}
                                         >
                                             <Text style={{ color: colors.text }}>
-                                                {item.name}: Preparation({item.preparationTime}) - Workout({item.workoutTime}) - Rest({item.restTime}) - Cycles({item.numberOfCycles})
+                                                <Text style={{ color: colors.primary, fontWeight: 'bold' }}>{item.name}: </Text>Preparation({item.preparationTime}) - Workout({item.workoutTime}) -
+                                                Rest({item.restTime}) - Cycles({item.numberOfCycles})
                                             </Text>
                                             <View style={{ position: 'absolute', right: 10, bottom: 8, flex: 1, flexDirection: 'row', gap: 20 }}>
                                                 <Button
