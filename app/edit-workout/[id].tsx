@@ -127,7 +127,7 @@ export default function EditWorkout() {
                 ...data,
             };
             await onSaveWorkout(newWorkout);
-            router.replace('/my-routines');
+            router.back();
         } catch (error) {
             //TODO:create state and show error
             console.log(error);
